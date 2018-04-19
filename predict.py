@@ -86,7 +86,7 @@ def predict(model, data, batch, org_shape, rate, gpu):
            for i in range(size[1])]
     img = np.hstack(buf)
     # 出力画像は入力画像の2倍の大きさになっているので半分に縮小する
-    img = IMG.resize(img, 1/rate)
+    img = IMG.resize(img, 1 / rate)
     # 結合しただけでは画像サイズがオリジナルと異なるので切り取る
     return img[:org_shape[0], :org_shape[1]]
 
@@ -119,19 +119,24 @@ def main(args):
     org_imgs = [cv2.imread(name, ch_flg)
                 for name in args.jpeg if IMG.isImgPath(name)]
     imgs = []
-    with chainer.using_config('train', False):
-        # 学習モデルを入力画像ごとに実行する
-        for i, img in enumerate(org_imgs):
+    # 学習モデルを入力画像ごとに実行する
+    for i, img in enumerate(org_imgs):
+        with chainer.using_config('train', False):
             img = predict(
-                model, IMG.splitSQ(img, size), args.batch, img.shape, sr, args.gpu
+                model,
+                IMG.splitSQ(img, size),
+                args.batch, img.shape, sr, args.gpu
             )
-            # 生成結果を保存する
-            name = F.getFilePath(
-                args.out_path, 'comp-' + str(i * 10 + 1).zfill(3), '.jpg'
-            )
-            print('save:', name)
-            cv2.imwrite(name, img)
-            imgs.append(img)
+
+        # 生成結果を保存する
+        name = F.getFilePath(args.out_path, 'predict', '.jpg')
+        print('save:', name)
+        cv2.imwrite(name, img)
+        imgs.append(img)
+
+    for i, j in zip(org_imgs, imgs):
+        cv2.imshow('view', IMG.resize(np.hstack([i, j]), 0.8))
+        cv2.waitKey()
 
 
 if __name__ == '__main__':

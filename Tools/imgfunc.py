@@ -183,11 +183,12 @@ def splitSQ(img, size, flg=cv2.BORDER_REPLICATE, array=True):
         exit()
 
     h, w = img.shape[:2]
-    if (h/size + w/size) > (h//size + w//size):
+    if (h / size + w / size) > (h // size + w // size):
         # 画像を分割する際に端が切れてしまうのを防ぐために余白を追加する
         img = cv2.copyMakeBorder(img, 0, size, 0, size, flg)
         # 画像を分割しやすいように画像サイズを変更する
-        img = img[:(img.shape[0] // size * size), :(img.shape[1] // size * size)]
+        img = img[:(img.shape[0] // size * size),
+                  :(img.shape[1] // size * size)]
 
     # 縦横の分割数を計算する
     split = (img.shape[0] // size, img.shape[1] // size)
@@ -242,7 +243,7 @@ def splitSQN(imgs, size, round_num=-1, flg=cv2.BORDER_REPLICATE):
         return np.array(out_imgs), (split[0], split[1])
 
 
-def rotate(img, angle, scale):
+def rotate(img, angle, scale, border=(0, 0, 0)):
     """
     画像を回転（反転）させる
     [in]  img:   回転させる画像
@@ -253,10 +254,10 @@ def rotate(img, angle, scale):
 
     size = img.shape[:2]
     mat = cv2.getRotationMatrix2D((size[0] // 2, size[1] // 2), angle, scale)
-    return cv2.warpAffine(img, mat, size, flags=cv2.INTER_CUBIC)
+    return cv2.warpAffine(img, mat, size, flags=cv2.INTER_CUBIC, borderValue=border)
 
 
-def rotateR(img, level=[-10, 10], scale=1.2):
+def rotateR(img, level=[-10, 10], scale=1.2, border=(0, 0, 0)):
     """
     ランダムに画像を回転させる
     [in]  img:   回転させる画像
@@ -266,10 +267,10 @@ def rotateR(img, level=[-10, 10], scale=1.2):
     """
 
     angle = np.random.randint(level[0], level[1])
-    return rotate(img, angle, scale), angle
+    return rotate(img, angle, scale, border), angle
 
 
-def rotateRN(imgs, num, level=[-10, 10], scale=1.2):
+def rotateRN(imgs, num, level=[-10, 10], scale=1.2, border=(0, 0, 0)):
     """
     画像リストをランダムに画像を回転させる
     [in]  img:   回転させる画像
@@ -284,7 +285,7 @@ def rotateRN(imgs, num, level=[-10, 10], scale=1.2):
     out_angle = []
     for n in range(num):
         for img in imgs:
-            i, a = rotateR(img, level, scale)
+            i, a = rotateR(img, level, scale, border)
             out_imgs.append(i)
             out_angle.append(a)
 
@@ -431,10 +432,11 @@ def paste(fg, bg, rot=0, x=0, y=0, mask_flg=True, rand_rot_flg=True, rand_pos_fl
 
     # Load two images
     img1 = bg.copy()
+    white = (255, 255, 255)
     if rand_rot_flg:
-        img2, rot = rotateR(fg, [-90, 90], 1.0)
+        img2, rot = rotateR(fg, [-90, 90], 1.0, white)
     else:
-        img2 = fg.copy()
+        img2 = rotate(fg, rot, 1.0, white)
 
     # I want to put logo on top-left corner, So I create a ROI
     w1, h1 = img1.shape[:2]

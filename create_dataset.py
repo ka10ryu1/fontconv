@@ -54,22 +54,24 @@ def create(pre_font, conv_font, font_size, img_size, font_num, img_num):
     y = []
 
     for i in range(img_num):
-        img_len = np.min([pre_font.shape[0], conv_font.shape[0]])-1
+        img_len = np.min([pre_font.shape[0], conv_font.shape[0]]) - 1
         label = range(img_len)
-        pre_img = IMG.blank((img_size, img_size, 3), 255)
-        conv_img = IMG.blank((img_size, img_size, 3), 255)
+        buf = 20
+        pre_img = IMG.blank((img_size + buf, img_size + buf, 3), 255)
+        conv_img = IMG.blank((img_size + buf, img_size + buf, 3), 255)
         for j in range(font_num):
             num = np.random.choice(label, 1, replace=False)[0]
             pf = pre_font[num][1:, 1:, ]
             cf = conv_font[num][1:, 1:, ]
-            pre_img, param = IMG.paste(pf, pre_img,
-                                       mask_flg=False, rand_rot_flg=False)
-            r, _x, _y = param
-            conv_img, _ = IMG.paste(cf, conv_img, x=_x, y=_y,
+            pre_img, param = IMG.paste(pf, pre_img, mask_flg=False)
+            _r, _x, _y = param
+            conv_img, _ = IMG.paste(cf, conv_img, rot=_r, x=_x, y=_y,
                                     mask_flg=False, rand_pos_flg=False, rand_rot_flg=False)
 
-        x.append(pre_img)
-        y.append(conv_img)
+        st = buf // 2
+        ed = img_size + buf // 2
+        x.append(pre_img[st:ed, st:ed])
+        y.append(conv_img[st:ed, st:ed])
 
     return np.array(x), np.array(y)
 
@@ -93,11 +95,12 @@ def main(args):
 
     # フォント画像をフォントごとに分割する
     h, w = x.shape[:2]
-    x, _ = IMG.splitSQ(x, h//3)
-    y, _ = IMG.splitSQ(y, h//3)
+    x, _ = IMG.splitSQ(x, h // 3)
+    y, _ = IMG.splitSQ(y, h // 3)
 
     print('create images...')
-    x, y = create(x, y, args.font_size, args.img_size, args.font_num, args.img_num)
+    x, y = create(x, y, args.font_size, args.img_size,
+                  args.font_num, args.img_num)
 
     # 画像の並び順をシャッフルするための配列を作成する
     # compとrawの対応を崩さないようにシャッフルしなければならない
