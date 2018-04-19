@@ -177,28 +177,40 @@ def splitSQ(img, size, flg=cv2.BORDER_REPLICATE, array=True):
     [out] split: 縦横の分割情報
     """
 
-    if size <= 1:
-        print('[Error] img.shape({0}), size({1})'.format(img.shape, size))
-        print(fileFuncLine())
-        exit()
+    def arrayChk(x, flg):
+        if flg:
+            return np.array(x)
+        else:
+            return x
+
+    def square(img):
+        width = np.min(img.shape[:2])
+        return img[:width, :width]
 
     h, w = img.shape[:2]
-    if (h/size + w/size) > (h//size + w//size):
-        # 画像を分割する際に端が切れてしまうのを防ぐために余白を追加する
-        img = cv2.copyMakeBorder(img, 0, size, 0, size, flg)
-        # 画像を分割しやすいように画像サイズを変更する
-        img = img[:(img.shape[0] // size * size), :(img.shape[1] // size * size)]
+    split = (h // size, w // size)
+
+    # sizeが負数だと分割しないでそのまま返す
+    if size <= 1:
+
+        return arrayChk([square(img)], array), (1, 1)
+
+    # sizeが入力画像よりも大きい場合は分割しないでそのまま返す
+    if split[0] == 0 or split[1] == 0:
+        return arrayChk([square(img)], array), (1, 1)
 
     # 縦横の分割数を計算する
-    split = (img.shape[0] // size, img.shape[1] // size)
+    if (h / size + w / size) > (h // size + w // size):
+        # 画像を分割する際に端が切れてしまうのを防ぐために余白を追加する
+        width = int(size * 0.2)
+        img = cv2.copyMakeBorder(img, 0, width, 0, width, flg)
+        # 画像を分割しやすいように画像サイズを変更する
+        img = img[:split[0] * size, :split[1] * size]
 
     # 画像を分割する
     imgs_2d = [np.vsplit(i, split[0]) for i in np.hsplit(img, split[1])]
     imgs_1d = [x for l in imgs_2d for x in l]
-    if array:
-        return np.array(imgs_1d), split
-    else:
-        return imgs_1d, split
+    return arrayChk(imgs_1d, array), split
 
 
 def splitSQN(imgs, size, round_num=-1, flg=cv2.BORDER_REPLICATE):
@@ -516,15 +528,14 @@ def arrNx(arr, rate, flg=cv2.INTER_NEAREST):
 
 def img2arr(img, norm=255, dtype=np.float32, gpu=-1):
     try:
-        w, h, ch = img.shape
+        w, h, _ = img.shape
     except:
-        w, h = img.shape
-        ch = 1
+        w, h = img.shape[:2]
 
     if(gpu >= 0):
-        return xp.array(img, dtype=dtype).reshape((ch, w, h)) / norm
+        return xp.array(img, dtype=dtype).reshape((-1, w, h)) / norm
     else:
-        return np.array(img, dtype=dtype).reshape((ch, w, h)) / norm
+        return np.array(img, dtype=dtype).reshape((-1, w, h)) / norm
 
 
 def imgs2arr(imgs, norm=255, dtype=np.float32, gpu=-1):
@@ -550,7 +561,7 @@ def imgs2arr(imgs, norm=255, dtype=np.float32, gpu=-1):
 
 
 def arr2img(arr, norm=255, dtype=np.uint8):
-    ch, size = arr.shape[0], arr.shape[1]
+    ch, size = arr.shape[-3], arr.shape[-2]
     y = np.array(arr).reshape((size, size, ch)) * 255
     return np.array(y, dtype=np.uint8)
 
