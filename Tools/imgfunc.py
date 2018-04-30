@@ -192,7 +192,6 @@ def splitSQ(img, size, flg=cv2.BORDER_REPLICATE, array=True):
 
     # sizeが負数だと分割しないでそのまま返す
     if size <= 1:
-
         return arrayChk([square(img)], array), (1, 1)
 
     # sizeが入力画像よりも大きい場合は分割しないでそのまま返す
@@ -202,9 +201,11 @@ def splitSQ(img, size, flg=cv2.BORDER_REPLICATE, array=True):
     # 縦横の分割数を計算する
     if (h / size + w / size) > (h // size + w // size):
         # 画像を分割する際に端が切れてしまうのを防ぐために余白を追加する
-        width = int(size * 0.2)
+        width = int(size * 0.5)
         img = cv2.copyMakeBorder(img, 0, width, 0, width, flg)
         # 画像を分割しやすいように画像サイズを変更する
+        h, w = img.shape[:2]
+        split = (h // size, w // size)
         img = img[:split[0] * size, :split[1] * size]
 
     # 画像を分割する
