@@ -122,7 +122,7 @@ def main(args):
     # 学習モデルを入力画像ごとに実行する
     for i, img in enumerate(org_imgs):
         with chainer.using_config('train', False):
-            img = predict(
+            dst = predict(
                 model,
                 IMG.splitSQ(img, size),
                 args.batch, img.shape, sr, args.gpu
@@ -131,8 +131,8 @@ def main(args):
         # 生成結果を保存する
         name = F.getFilePath(args.out_path, 'predict', '.jpg')
         print('save:', name)
-        cv2.imwrite(name, img)
-        imgs.append(img)
+        cv2.imwrite(name, dst)
+        imgs.append(dst)
 
     for i, j in zip(org_imgs, imgs):
         cv2.imshow('view', IMG.resize(np.hstack([i, j]), 0.8))

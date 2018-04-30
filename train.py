@@ -20,6 +20,8 @@ import Tools.imgfunc as IMG
 import Tools.getfunc as GET
 import Tools.func as F
 
+import pruning
+
 
 class ResizeImgDataset(chainer.dataset.DatasetMixin):
     def __init__(self, dataset, rate, dtype=np.float32):
@@ -58,6 +60,8 @@ def command():
                         help='オプティマイザ [default: adam, other: ada_d/ada_g/m_sgd/n_ag/rmsp/rmsp_g/sgd/smorms]')
     parser.add_argument('-lf', '--lossfun', default='mse',
                         help='損失関数 [default: mse, other: mae, ber, gauss_kl]')
+    parser.add_argument('-p', '--pruning', type=float, default=0.5,
+                        help='pruning率（snapshot使用時のみ効果あり） [default: 0.5]')
     parser.add_argument('-b', '--batchsize', type=int, default=20,
                         help='ミニバッチサイズ [default: 20]')
     parser.add_argument('-e', '--epoch', type=int, default=10,
@@ -113,7 +117,7 @@ def main(args):
     train = ResizeImgDataset(train, args.shuffle_rate)
     test = ResizeImgDataset(test, args.shuffle_rate)
     # predict.pyでモデルを決定する際に必要なので記憶しておく
-    model_param = {i: getattr(args, i) for i in dir(args) if not '_' in i[0]}
+    model_param = F.args2dict(args)
     model_param['shape'] = train[0][0].shape
 
     train_iter = chainer.iterators.SerialIterator(train, args.batchsize)
@@ -179,11 +183,14 @@ def main(args):
     if args.resume:
         # Resume from a snapshot
         chainer.serializers.load_npz(args.resume, trainer)
+        # Set pruning
+        # http://tosaka2.hatenablog.com/entry/2017/11/17/194051
+        masks = pruning.create_model_mask(model, args.pruning)
+        trainer.extend(pruning.pruned(model, masks))
 
     if args.only_check is False:
         # predict.pyでモデルのパラメータを読み込むjson形式で保存する
-        with open(F.getFilePath(args.out_path, exec_time, '.json'), 'w') as f:
-            json.dump(model_param, f, indent=4, sort_keys=True)
+        F.dict2json(args.out_path, exec_time, model_param)
 
     # Run the training
     trainer.run()

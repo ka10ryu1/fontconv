@@ -4,8 +4,8 @@
 help = '画像を読み込んでデータセットを作成する'
 #
 
-import os
 import cv2
+import json
 import argparse
 import numpy as np
 
@@ -116,6 +116,9 @@ def main(args):
     test_y = IMG.imgs2arr(y[shuffle[train_size:]], dtype=dtype)
     print('train x/y:{0}/{1}'.format(train_x.shape, train_y.shape))
     print('test  x/y:{0}/{1}'.format(test_x.shape, test_y.shape))
+
+    print('save param...')
+    F.dict2json(args.out_path, 'dataset', F.args2dict(args))
 
     # 生成したデータをnpz形式でデータセットとして保存する
     # ここで作成したデータの中身を確認する場合はnpz2jpg.pyを使用するとよい
