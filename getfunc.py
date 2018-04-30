@@ -20,7 +20,7 @@ from func import fileFuncLine
 
 def datetime32():
     """
-    時刻情報を元に衝突しにくい名前を自動で生成する
+    時刻情報を元に衝突しにくい名前を自動で生成する（base_repr使用版）
     [out] 生成された名前
     """
 
@@ -31,13 +31,19 @@ def datetime32():
 
 
 def datetimeSHA(secret='emacs', str_len=8):
+    """
+    時刻情報を元に衝突しにくい名前を自動で生成する（hmac使用版）
+    [out] 生成された名前
+    """
+
     import hmac
 
     byte_1 = bytearray(secret, 'ASCII')
     now = datetime.today()
     exec_time1 = int(now.strftime('%y%m%d'))
     exec_time2 = int(now.strftime('%H%M%S'))
-    byte_2 = bytearray(np.base_repr(exec_time1 * exec_time2, 32).lower(), 'ASCII')
+    byte_2 = bytearray(np.base_repr(
+        exec_time1 * exec_time2, 32).lower(), 'ASCII')
     myhash = hmac.new(byte_1, byte_2).hexdigest()
     return myhash[:str_len]
 
@@ -108,7 +114,7 @@ def optimizer(opt_str):
     """
 
     if(opt_str.lower() == 'adam'):
-        opt = O.Adam()
+        opt = O.Adam(amsgrad=True)
     elif(opt_str.lower() == 'ada_d'):
         opt = O.AdaDelta()
     elif(opt_str.lower() == 'ada_g'):
@@ -126,7 +132,7 @@ def optimizer(opt_str):
     elif(opt_str.lower() == 'smorms'):
         opt = O.SMORMS3()
     else:
-        opt = O.Adam()
+        opt = O.Adam(amsgrad=True)
         print('\n[Warning] {0}\n\t{1}->{2}\n'.format(
             fileFuncLine(), opt_str, opt.__doc__.split('.')[0])
         )
@@ -190,7 +196,7 @@ def imgData(folder):
     # 探索するフォルダがなければ終了
     if not os.path.isdir(folder):
         print('[Error] folder not found:', folder)
-        print(F.fileFuncLine())
+        print(fileFuncLine())
         exit()
 
     # 学習用データとテスト用データを発見したらTrueにする
