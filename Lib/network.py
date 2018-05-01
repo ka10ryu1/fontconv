@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-help = 'jpegcompのネットワーク部分'
+help = 'fontconvのネットワーク部分'
 #
 
 import time

@@ -4,7 +4,6 @@
 help = '学習メイン部'
 #
 
-import json
 import argparse
 import numpy as np
 
@@ -19,8 +18,7 @@ from Lib.plot_report_log import PlotReportLog
 import Tools.imgfunc as IMG
 import Tools.getfunc as GET
 import Tools.func as F
-
-import pruning
+import Tools.pruning as pruning
 
 
 class ResizeImgDataset(chainer.dataset.DatasetMixin):
@@ -190,7 +188,7 @@ def main(args):
 
     if args.only_check is False:
         # predict.pyでモデルのパラメータを読み込むjson形式で保存する
-        F.dict2json(args.out_path, exec_time, model_param)
+        F.dict2json(args.out_path, exec_time + '_train', model_param)
 
     # Run the training
     trainer.run()
