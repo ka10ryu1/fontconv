@@ -18,8 +18,7 @@ from Lib.plot_report_log import PlotReportLog
 import Tools.imgfunc as IMG
 import Tools.getfunc as GET
 import Tools.func as F
-
-import pruning
+import Tools.pruning as pruning
 
 
 class ResizeImgDataset(chainer.dataset.DatasetMixin):
