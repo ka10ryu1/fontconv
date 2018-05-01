@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*-coding: utf-8 -*-
 #
-help = '画像を読み込んでデータセットを作成する'
+help = 'モデルの枝刈をする'
 #
 
 import chainer
