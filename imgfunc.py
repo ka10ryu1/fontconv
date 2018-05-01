@@ -445,7 +445,6 @@ def paste(fg, bg, rot=0, x=0, y=0, mask_flg=True, rand_rot_flg=True, rand_pos_fl
     if rand_rot_flg:
         # ランダムに回転
         img2, rot = rotateR(fg, angle, scale, white)
-        print('rot', rot)
     else:
         # 任意の角度で回転
         img2 = rotate(fg, rot, scale, white)
