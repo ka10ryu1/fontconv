@@ -67,15 +67,65 @@ $ tree >& log.txt
 
 ## 1. データセットを作成する
 
+以下を実行する。
+
 ```console
-$ ./train.py -i FontData/
+$ ./create_dataset.py Font/00_yu_gothic_12pt.png Font/01_Berlin_Sans_FB_12pt.png
 ```
+
+`result`フォルダが作成され、以下のデータが保存されていることを確認する
+
+- `dataset.json`
+- `test_128x128_000100.npz`
+- `train_128x128_000900.npz`
+
+`dataset.json`は作成されたデータの情報が格納されている。
+
+```console
+$ cat result/dataset.json
+{
+    "conv_font": "Font/01_Berlin_Sans_FB_12pt.png",
+    "font_num": 10,
+    "font_size": 64,
+    "img_num": 1000,
+    "img_size": 128,
+    "out_path": "./result/",
+    "pre_font": "Font/00_yu_gothic_12pt.png",
+    "round": 1000,
+    "train_per_all": 0.9
+}
+```
+
+`test_128x128_000100.npz`と`train_128x128_000900.npz`は学習に使用するテストデータと学習データ。それぞれの中身を確認するには以下を入力する。
+
+```console
+$ Tools/npz2jpg.py result/test_128x128_000100.npz
+```
+
+表示された画像の上段が入力画像（`yu_gothic`）で、下段が正解画像（作成したいフォント）。その他`Tools`の機能を利用したい場合は`Tools/README.md`を参照されたい。
 
 
 ## 2. 学習する
 
-### 実行
+以下を実行する
 
 ```console
-$ ./train.py -i FontData/
+$ ./train.py
 ```
+
+`result`フォルダに以下のデータが保存されていることを確認する
+
+- `*_train.json`
+- `*.log`
+- `*.model`
+- `*_10.snapshot`
+- `*_graph.dot`
+- `loss.png`
+
+## 3. 学習で作成されたモデルを使用する
+
+```console
+$ ./predict.py result/*.model result/*_train.json Font/test.png
+```
+
+その他のパラメータ設定は`-h`で確認する。デモと同様のパラメータにしたい場合は`Model/param.json`を参考にすると良い。
