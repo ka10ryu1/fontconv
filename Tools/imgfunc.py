@@ -169,7 +169,7 @@ def cutN(imgs, size=-1, round_num=-1):
         return np.array(out_imgs)
 
 
-def splitSQ(img, size, flg=cv2.BORDER_REPLICATE, w_rate=0.5, array=True):
+def splitSQ(img, size, flg=cv2.BORDER_REPLICATE, w_rate=0.2, array=True):
     """
     入力された画像を正方形に分割する
     ※詳細はsplitSQNとほぼ同じなので省略
@@ -251,7 +251,7 @@ def rotate(img, angle, scale, border=(0, 0, 0)):
     [out] 回転させた画像
     """
 
-    size = img.shape[:2]
+    size = (img.shape[1], img.shape[0])
     mat = cv2.getRotationMatrix2D((size[0] // 2, size[1] // 2), angle, scale)
     return cv2.warpAffine(img, mat, size, flags=cv2.INTER_CUBIC, borderValue=border)
 
@@ -442,7 +442,6 @@ def paste(fg, bg, rot=0, x=0, y=0, mask_flg=True, rand_rot_flg=True, rand_pos_fl
     white = (max_val, max_val, max_val)
     angle = [-90, 90]  # ランダム回転の範囲
     scale = 1.0  # 画像の拡大率
-    white = (max_val, max_val, max_val)
     if rand_rot_flg:
         # ランダムに回転
         img2, rot = rotateR(fg, angle, scale, white)
