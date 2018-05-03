@@ -209,7 +209,7 @@ def splitSQ(img, size, flg=cv2.BORDER_REPLICATE, w_rate=0.5, array=True):
     return arrayChk(imgs_1d, array), split
 
 
-def splitSQN(imgs, size, round_num=-1, flg=cv2.BORDER_REPLICATE):
+def splitSQN(imgs, size, round_num=-1, flg=cv2.BORDER_REPLICATE, w_rate=0.2):
     """
     入力された画像リストを正方形に分割する
     imgsに格納されている画像はサイズが同じであること
@@ -224,7 +224,7 @@ def splitSQN(imgs, size, round_num=-1, flg=cv2.BORDER_REPLICATE):
     out_imgs = []
     split = []
     for img in imgs:
-        i, s = splitSQ(img, size, flg, False)
+        i, s = splitSQ(img, size, flg, w_rate, False)
         out_imgs.extend(i)
         split.extend(s)
 
