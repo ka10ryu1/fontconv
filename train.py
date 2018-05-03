@@ -183,7 +183,7 @@ def main(args):
         chainer.serializers.load_npz(args.resume, trainer)
         # Set pruning
         # http://tosaka2.hatenablog.com/entry/2017/11/17/194051
-        masks = pruning.create_model_mask(model, args.pruning)
+        masks = pruning.create_model_mask(model, args.pruning, args.gpu_id)
         trainer.extend(pruning.pruned(model, masks))
 
     if args.only_check is False:
