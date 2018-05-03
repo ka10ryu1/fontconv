@@ -124,7 +124,7 @@ def main(args):
         with chainer.using_config('train', False):
             dst = predict(
                 model,
-                IMG.splitSQ(img, size),
+                IMG.splitSQ(img, size, w_rate=1.0),
                 args.batch, img.shape, sr, args.gpu
             )
 
@@ -135,7 +135,12 @@ def main(args):
         imgs.append(dst)
 
     for i, j in zip(org_imgs, imgs):
-        cv2.imshow('view', IMG.resize(np.hstack([i, j]), 0.8))
+        if (i.shape[0] + j.shape[0]) > i.shape[1]:
+            img = IMG.resize(np.hstack([i, j]), 0.8)
+        else:
+            img = IMG.resize(np.vstack([i, j]), 0.8)
+
+        cv2.imshow('view', img)
         cv2.waitKey()
 
 
