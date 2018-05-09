@@ -1,11 +1,20 @@
 # 概要
 
-英語にしか対応していないフォントで日本語も（ムリヤリ）対応させる
+英語にしか対応していないフォントでも、Deep Learningで日本語もそれっぽく生成させる
 
 ## 学習結果
 
 ## デモを実行する
 
+以下を実行すると、Berlin Sans FB風フォントで日本語フォントを表示する。
+生成結果は`result`フォルダにも保存されている。
+
+$ ./predict.py Model/01/*model Model/01/param.json Font/test.png
+
+画像データでは使いにくいという人のために、SVG形式で出力する機能もある。
+以下を実行することで、SVG形式に変換したデータが入力画像と同じフォルダに保存される。
+
+$ ./jpg2svg.sh result/predict.jpg
 
 
 #  動作環境
@@ -34,8 +43,10 @@ $ tree >& log.txt
 │   ├── network.py > fontconvのネットワーク部分
 │   └── plot_report_log.py
 ├── Model
-│   ├── demo.model
-│   └── param.json
+│   └── 01
+│       ├── Berlin_Sans_FB.model
+│       ├── dataset.json
+│       └── param.json
 ├── README.md
 ├── Tools
 │   ├── LICENSE
@@ -52,20 +63,27 @@ $ tree >& log.txt
 │   ├── imgfunc.py         > 画像処理に関する便利機能
 │   ├── npz2jpg.py         > 作成したデータセット（.npz）の中身を画像として出力する
 │   ├── plot_diff.py       > logファイルの複数比較
-│   └── png_monitoring.py  > 任意のフォルダの監視
+│   ├── png_monitoring.py  > 任意のフォルダの監視
+│   └── pruning.py         > モデルの枝刈をする
 ├── auto_train.sh
 ├── clean_all.sh
 ├── create_dataset.py > 画像を読み込んでデータセットを作成する
+├── jpg2svg.sh
 ├── predict.py        > モデルとモデルパラメータを利用して推論実行する
 ├── pruning.py        > モデルの枝刈をする
 └── train.py          > 学習メイン部
 ```
 
 
-
 # チュートリアル
 
 ## 1. データセットを作成する
+
+実行に必要なデータは**入力画像**と**正解画像**である。チュートリアルではyu gothicを入力画像とし、Berlin Sans FBを正解画像としている。以下の画像を`create_dataset.py`でランダムに取得して学習（テスト）データを任意の数だけ生成する。Berlin Sans FB以外にも色々フォントを用意しているし、画像の形状などを揃えれば別のフォントでも生成可能。
+
+|yu gothic|<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/00_yu_gothic_12pt.png" width="640px">|
+|---|---|
+|Berlin Sans FB|<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/01_Berlin_Sans_FB_12pt.png" width="640px">|
 
 以下を実行する。
 
@@ -102,6 +120,8 @@ $ cat result/dataset.json
 $ Tools/npz2jpg.py result/test_128x128_000100.npz
 ```
 
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/npz2jpg.jpg" width="640px">
+
 表示された画像の上段が入力画像（`yu_gothic`）で、下段が正解画像（作成したいフォント）。その他`Tools`の機能を利用したい場合は`Tools/README.md`を参照されたい。
 
 
@@ -113,13 +133,13 @@ $ Tools/npz2jpg.py result/test_128x128_000100.npz
 $ ./train.py
 ```
 
-`result`フォルダに以下のデータが保存されていることを確認する
+学習完了後、`result`フォルダに以下のデータが保存されていることを確認する
 
-- `*_train.json`
 - `*.log`
 - `*.model`
 - `*_10.snapshot`
 - `*_graph.dot`
+- `*_train.json`
 - `loss.png`
 
 ## 3. 学習で作成されたモデルを使用する
@@ -128,4 +148,4 @@ $ ./train.py
 $ ./predict.py result/*.model result/*_train.json Font/test.png
 ```
 
-その他のパラメータ設定は`-h`で確認する。デモと同様のパラメータにしたい場合は`Model/param.json`を参考にすると良い。
+その他のパラメータ設定は`-h`で確認する。デモと同様のパラメータにしたい場合は`Model`にある`param.json`を参考にするとよい。
