@@ -63,10 +63,11 @@ def create(pre_font, conv_font, font_size, img_size, font_num, img_num):
             num = np.random.choice(label, 1, replace=False)[0]
             pf = pre_font[num][1:, 1:, ]
             cf = conv_font[num][1:, 1:, ]
-            pre_img, param = IMG.paste(pf, pre_img, mask_flg=False, ch=1)
+            pre_img, param = IMG.paste(pf, pre_img, mask_flg=False)
             _r, _x, _y = param
             conv_img, _ = IMG.paste(cf, conv_img, rot=_r, x=_x, y=_y,
-                                    mask_flg=False, rand_pos_flg=False, rand_rot_flg=False, ch=1)
+                                    mask_flg=False, rand_pos_flg=False,
+                                    rand_rot_flg=False)
 
         st = buf // 2
         ed = img_size + buf // 2

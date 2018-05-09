@@ -1,0 +1,11 @@
+{
+    "conv_font": "Font/02_Bodoni_MT_Black_12pt.png",
+    "font_num": 10,
+    "font_size": 64,
+    "img_num": 40000,
+    "img_size": 128,
+    "out_path": "./result/",
+    "pre_font": "Font/00_yu_gothic_12pt.png",
+    "round": 1000,
+    "train_per_all": 0.95
+}
