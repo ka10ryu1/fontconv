@@ -79,7 +79,7 @@ $ tree >& log.txt
 
 ## 1. データセットを作成する
 
-実行に必要なデータは**入力画像**と**正解画像**である。今回はyu gothicを入力画像とし、Berlin Sans FBを正解画像としている。
+実行に必要なデータは**入力画像**と**正解画像**である。チュートリアルではyu gothicを入力画像とし、Berlin Sans FBを正解画像としている。以下の画像を`create_dataset.py`でランダムに取得して学習（テスト）データを任意の数だけ生成する。
 
 |yu gothic|<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/00_yu_gothic_12pt.png" width="640px">|
 |---|---|
@@ -119,6 +119,9 @@ $ cat result/dataset.json
 ```console
 $ Tools/npz2jpg.py result/test_128x128_000100.npz
 ```
+
+|Berlin Sans FB|<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/01_Berlin_Sans_FB_12pt.png" width="640px">|
+
 
 表示された画像の上段が入力画像（`yu_gothic`）で、下段が正解画像（作成したいフォント）。その他`Tools`の機能を利用したい場合は`Tools/README.md`を参照されたい。
 
