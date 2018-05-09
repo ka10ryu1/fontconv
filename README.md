@@ -79,7 +79,7 @@ $ tree >& log.txt
 
 ## 1. データセットを作成する
 
-実行に必要なデータは**入力画像**と**正解画像**である。チュートリアルではyu gothicを入力画像とし、Berlin Sans FBを正解画像としている。以下の画像を`create_dataset.py`でランダムに取得して学習（テスト）データを任意の数だけ生成する。
+実行に必要なデータは**入力画像**と**正解画像**である。チュートリアルではyu gothicを入力画像とし、Berlin Sans FBを正解画像としている。以下の画像を`create_dataset.py`でランダムに取得して学習（テスト）データを任意の数だけ生成する。Berlin Sans FB以外にも色々フォントを用意しているし、画像の形状などを揃えれば別のフォントでも生成可能。
 
 |yu gothic|<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/00_yu_gothic_12pt.png" width="640px">|
 |---|---|
