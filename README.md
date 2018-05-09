@@ -81,9 +81,9 @@ $ tree >& log.txt
 
 実行に必要なデータは**入力画像**と**正解画像**である。今回はyu gothicを入力画像とし、Berlin Sans FBを正解画像としている。
 
-|yu gothic|<https://github.com/ka10ryu1/fontconv/blob/master/Font/00_yu_gothic_12pt.png>|
+|yu gothic|<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/00_yu_gothic_12pt.png" width="640px">|
 |---|---|
-|Berlin Sans FB|<https://github.com/ka10ryu1/fontconv/blob/master/Font/01_Berlin_Sans_FB_12pt.png>|
+|Berlin Sans FB|<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/01_Berlin_Sans_FB_12pt.png" width="640px">|
 
 以下を実行する。
 
