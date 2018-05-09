@@ -120,8 +120,7 @@ $ cat result/dataset.json
 $ Tools/npz2jpg.py result/test_128x128_000100.npz
 ```
 
-|Berlin Sans FB|<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/01_Berlin_Sans_FB_12pt.png" width="640px">|
-
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/npz2jpg.jpg" width="640px">
 
 表示された画像の上段が入力画像（`yu_gothic`）で、下段が正解画像（作成したいフォント）。その他`Tools`の機能を利用したい場合は`Tools/README.md`を参照されたい。
 
