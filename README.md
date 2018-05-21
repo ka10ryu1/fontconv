@@ -4,6 +4,34 @@
 
 ## 学習結果
 
+### **Berlin Sans FB**
+
+学習データ（英数字記号）を入力する
+
+<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/00_yu_gothic_12pt.png" width="640px">
+
+学習結果（英数字記号）
+
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_sample.jpg" width="640px">
+
+未学習データ（漢字ひらがな）を入力する。
+
+<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/test.png" width="640px">
+
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_01.jpg" width="640px">
+
+### **Bodoni MT Black**
+
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_02.jpg" width="640px">
+
+### **Bradley Hand ITC**
+
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_03.jpg" width="640px">
+
+
+
+
+
 ## デモを実行する
 
 以下を実行すると、Berlin Sans FB風フォントで日本語フォントを表示する。
@@ -15,6 +43,10 @@ $ ./predict.py Model/01/*model Model/01/param.json Font/test.png
 以下を実行することで、SVG形式に変換したデータが入力画像と同じフォルダに保存される。
 
 $ ./jpg2svg.sh result/predict.jpg
+
+実行結果は以下のようになる。
+
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_01.svg" width="640px">
 
 
 #  動作環境
@@ -45,6 +77,14 @@ $ tree >& log.txt
 ├── Model
 │   └── 01
 │       ├── Berlin_Sans_FB.model
+│       ├── dataset.json
+│       └── param.json
+│   ├── 02
+│   │   ├── Bodoni_MT_Black.model
+│   │   ├── dataset.json
+│   │   └── param.json
+│   └── 03
+│       ├── Bradley_Hand_ITC.model
 │       ├── dataset.json
 │       └── param.json
 ├── README.md
