@@ -4,6 +4,12 @@
 help = '学習メイン部'
 #
 
+import logging
+# basicConfig()は、 debug()やinfo()を最初に呼び出す"前"に呼び出すこと
+print('LOGGING')
+logging.basicConfig(format='%(message)s')
+logging.getLogger('Tools').setLevel(level=logging.INFO)
+
 import argparse
 import numpy as np
 
@@ -11,7 +17,6 @@ import chainer
 import chainer.links as L
 from chainer import training
 from chainer.training import extensions
-
 
 from Lib.network import JC_DDUU as JC
 from Lib.plot_report_log import PlotReportLog
