@@ -2,7 +2,7 @@
     "conv_font": "Font/01_Berlin_Sans_FB_12pt.png",
     "font_num": 10,
     "font_size": 64,
-    "img_num": 40000,
+    "img_num": 100000,
     "img_size": 128,
     "out_path": "./result/",
     "pre_font": "Font/00_yu_gothic_12pt.png",

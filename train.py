@@ -92,12 +92,14 @@ def main(args):
     # Classifier reports softmax cross entropy loss and accuracy at every
     # iteration, which will be used by the PrintReport extension below.
 
+    train, test, ch = GET.imgData(args.in_path)
+
     # 活性化関数を取得する
     actfun1 = GET.actfun(args.actfun1)
     actfun2 = GET.actfun(args.actfun2)
     # モデルを決定する
     model = L.Classifier(
-        JC(n_unit=args.unit, n_out=3, rate=args.shuffle_rate,
+        JC(n_unit=args.unit, n_out=ch, rate=args.shuffle_rate,
            actfun1=actfun1, actfun2=actfun2, dropout=args.dropout,
            view=args.only_check),
         lossfun=GET.lossfun(args.lossfun)
@@ -116,7 +118,6 @@ def main(args):
     optimizer.setup(model)
 
     # Load dataset
-    train, test = GET.imgData(args.in_path)
     train = ResizeImgDataset(train, args.shuffle_rate)
     test = ResizeImgDataset(test, args.shuffle_rate)
     # predict.pyでモデルを決定する際に必要なので記憶しておく

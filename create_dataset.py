@@ -66,12 +66,13 @@ def create(pre_font, conv_font, font_size, img_size, font_num, img_num):
             pre_img, param = IMG.paste(pf, pre_img, mask_flg=False)
             _r, _x, _y = param
             conv_img, _ = IMG.paste(cf, conv_img, rot=_r, x=_x, y=_y,
-                                    mask_flg=False, rand_pos_flg=False, rand_rot_flg=False)
+                                    mask_flg=False, rand_pos_flg=False,
+                                    rand_rot_flg=False)
 
         st = buf // 2
         ed = img_size + buf // 2
-        x.append(pre_img[st:ed, st:ed])
-        y.append(conv_img[st:ed, st:ed])
+        x.append(cv2.cvtColor(pre_img[st:ed, st:ed], cv2.COLOR_RGB2GRAY))
+        y.append(cv2.cvtColor(conv_img[st:ed, st:ed], cv2.COLOR_BGR2GRAY))
 
     return np.array(x), np.array(y)
 
