@@ -65,7 +65,6 @@ $ tree >& log.txt
 │   ├── plot_diff.py       > logファイルの複数比較
 │   ├── png_monitoring.py  > 任意のフォルダの監視
 │   └── pruning.py         > モデルの枝刈をする
-├── auto_train.sh
 ├── clean_all.sh
 ├── create_dataset.py > 画像を読み込んでデータセットを作成する
 ├── jpg2svg.sh
