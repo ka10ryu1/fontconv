@@ -16,17 +16,17 @@
 
 未学習データ（漢字ひらがな）を入力する。
 
-<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/test.png" width="640px">
+<img src="https://github.com/ka10ryu1/fontconv/blob/master/Font/test.png" width="320px">
 
-<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_01.jpg" width="640px">
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_01.jpg" width="320px">
 
 ### **Bodoni MT Black**
 
-<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_02.jpg" width="640px">
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_02.jpg" width="320px">
 
 ### **Bradley Hand ITC**
 
-<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_03.jpg" width="640px">
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_03.jpg" width="320px">
 
 
 
@@ -46,7 +46,7 @@ $ ./jpg2svg.sh result/predict.jpg
 
 実行結果は以下のようになる。
 
-<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_01.svg" width="640px">
+<img src="https://github.com/ka10ryu1/fontconv/blob/image/predict_01.svg" width="320px">
 
 
 #  動作環境
