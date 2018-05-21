@@ -113,10 +113,12 @@ def main(args):
     if args.gpu >= 0:
         chainer.cuda.get_device_from_id(args.gpu).use()
         model.to_gpu()
+    else:
+        model.to_intel64()
 
     # 高圧縮画像の生成
     ch_flg = IMG.getCh(ch)
-    org_imgs = [cv2.imread(name, ch_flg)
+    org_imgs = [IMG.resize(cv2.imread(name, ch_flg), 2)
                 for name in args.jpeg if IMG.isImgPath(name)]
     imgs = []
     # 学習モデルを入力画像ごとに実行する
@@ -131,14 +133,14 @@ def main(args):
         # 生成結果を保存する
         name = F.getFilePath(args.out_path, 'predict', '.jpg')
         print('save:', name)
-        cv2.imwrite(name, dst)
+        cv2.imwrite(name, IMG.resize(dst, 0.5))
         imgs.append(dst)
 
     for i, j in zip(org_imgs, imgs):
         if (i.shape[0] + j.shape[0]) > i.shape[1]:
-            img = IMG.resize(np.hstack([i, j]), 0.8)
+            img = IMG.resize(np.hstack([i, j]), 0.5)
         else:
-            img = IMG.resize(np.vstack([i, j]), 0.8)
+            img = IMG.resize(np.vstack([i, j]), 0.5)
 
         cv2.imshow('view', img)
         cv2.waitKey()

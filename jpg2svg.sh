@@ -17,7 +17,7 @@ echo "convert" $fpath "->" $fpath_bmp "(200%)"
 convert $fpath -resize 200% $fpath_bmp
 # 200%のbmp形式のファイルをsvg形式に変換する
 echo "potrace" $fpath_bmp
-potrace -s $fpath_bmp -k0.75 -a 1.3
+potrace -s $fpath_bmp -k0.8 -a 1.5
 # bmp形式は不要なので削除
 echo "rm" $fpath_bmp
 rm -rf $fpath_bmp
