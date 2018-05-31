@@ -4,6 +4,12 @@
 help = 'モデルとモデルパラメータを利用して推論実行する'
 #
 
+import logging
+# basicConfig()は、 debug()やinfo()を最初に呼び出す"前"に呼び出すこと
+level = logging.INFO
+logging.basicConfig(format='%(message)s')
+logging.getLogger('Tools').setLevel(level=level)
+
 import cv2
 import time
 import argparse
@@ -93,7 +99,11 @@ def predict(model, data, batch, org_shape, rate, gpu):
 
 def main(args):
     # jsonファイルから学習モデルのパラメータを取得する
-    net, unit, ch, size, layer, sr, af1, af2 = GET.modelParam(args.param)
+    p = ['unit', 'shape', 'shuffle_rate', 'actfun1', 'actfun2']
+    unit, shape, sr, af1, af2 = GET.jsonData(args.param, p)
+    af1 = GET.actfun(af1)
+    af2 = GET.actfun(af2)
+    ch, size = shape[:2]
     # 学習モデルを生成する
     model = L.Classifier(
         JC(n_unit=unit, n_out=ch, rate=sr, actfun1=af1, actfun2=af2)
@@ -132,6 +142,8 @@ def main(args):
 
         # 生成結果を保存する
         name = F.getFilePath(args.out_path, 'predict', '.jpg')
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        dst = clahe.apply(dst)
         print('save:', name)
         cv2.imwrite(name, IMG.resize(dst, 0.5))
         imgs.append(dst)
