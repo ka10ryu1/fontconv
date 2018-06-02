@@ -97,6 +97,14 @@ def predict(model, data, batch, org_shape, rate, gpu):
     return img[:org_shape[0], :org_shape[1]]
 
 
+def cleary(img, clip_limit=3, grid=(8, 8), thresh=225):
+    clahe = cv2.createCLAHE(clipLimit=clip_limit, tileGridSize=grid)
+    dst = clahe.apply(img)
+    th = dst.copy()
+    th[dst > thresh] = 255
+    return th
+
+
 def main(args):
     # jsonファイルから学習モデルのパラメータを取得する
     p = ['unit', 'shape', 'shuffle_rate', 'actfun1', 'actfun2']
@@ -141,9 +149,10 @@ def main(args):
             )
 
         # 生成結果を保存する
+        name = F.getFilePath(args.out_path, 'predict_raw', '.jpg')
+        cv2.imwrite(name, IMG.resize(dst, 0.5))
+        dst = cleary(dst)
         name = F.getFilePath(args.out_path, 'predict', '.jpg')
-        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-        dst = clahe.apply(dst)
         print('save:', name)
         cv2.imwrite(name, IMG.resize(dst, 0.5))
         imgs.append(dst)
